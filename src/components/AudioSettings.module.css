@@ -1,0 +1,131 @@
+.trigger {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: clamp(1rem, 3.5vw, 3rem);
+  inset-inline-end: clamp(1rem, 3.5vw, 3rem);
+  display: inline-flex;
+  min-block-size: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding-inline: 0.9rem;
+  border: 1px solid #e7c39a65;
+  border-radius: 0.5rem;
+  background: #21170eea;
+  color: var(--text);
+}
+
+.trigger:hover {
+  background: #4b3321;
+}
+
+.gear {
+  color: var(--accent);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.dialog {
+  inline-size: min(28rem, calc(100% - 2rem));
+  max-block-size: calc(100% - 2rem);
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #b0875e9c;
+  border-radius: 1.15rem;
+  background: #211811;
+  color: var(--text);
+  box-shadow: 0 1.5rem 5rem #160d09a6;
+}
+
+.dialog::backdrop {
+  background: #130c09b8;
+}
+
+.content {
+  display: grid;
+  gap: 1.35rem;
+  padding: clamp(1rem, 5vw, 2rem);
+}
+
+.content h2 {
+  margin: 0;
+  font-family: var(--heading-font);
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sound {
+  display: grid;
+  min-inline-size: 0;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #71533e;
+  border-radius: 0.65rem;
+}
+
+.sound legend {
+  padding-inline: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.mute,
+.volumeLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mute {
+  min-block-size: 2.75rem;
+  padding-block-end: 0.55rem;
+  border-block-end: 1px solid #71533e;
+  cursor: pointer;
+}
+
+.volume {
+  display: grid;
+  gap: 0.2rem;
+  padding-block: 0.3rem;
+}
+
+.volumeLabel {
+  flex-wrap: wrap;
+}
+
+.value {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.sound input {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.mute input {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  cursor: pointer;
+}
+
+.volume input {
+  inline-size: 100%;
+  min-block-size: 2rem;
+  cursor: pointer;
+}
+
+.sound input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.actions {
+  display: flex;
+  justify-content: end;
+}

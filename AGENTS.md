@@ -30,6 +30,7 @@ L’ancien dépôt est le dossier voisin `../maybetomorrow`. Il sert de référe
 - L’accueil donne la priorité à son décor WebP et propose une version plus légère sur mobile. Le code et le décor de la sélection sont chargés à l’ouverture de cet écran. Respecter les dimensions des portraits pour réserver leur espace dès l’affichage.
 - L’ancien jeu tire un événement dès l’ouverture de la partie. Commencer au jour 1 avant le premier tirage est une amélioration proposée. Autres corrections identifiées pendant l’analyse, conserver tous les événements résolus pendant une journée et appliquer la sourdine à la musique comme aux effets.
 - Le comportement de fin de partie reste à définir. L’ancien jeu permet d’avancer après la mort de toute l’équipe, `end.png` est inutilisé et le bouton `QUIT` est présent sans action.
+- Les menus partagent le mixeur dans `src/audio/` et la fenêtre Paramètres. L’ambiance démarre au premier clic ou à la première activation au clavier et reste en boucle pendant la navigation. Les volumes de l’ambiance et des clics ainsi que la sourdine sont enregistrés localement.
 
 ## Ressources du jeu
 
