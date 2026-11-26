@@ -1,0 +1,102 @@
+.screen {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  min-block-size: 100svh;
+  background: #1d1713;
+}
+
+.scenery {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 0 27%;
+}
+
+.scenery img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+.scenery::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      #1d1713 0%,
+      #1d1713e6 14%,
+      #1d17136b 36%,
+      transparent 66%
+    ),
+    linear-gradient(
+      180deg,
+      #1d1713 10%,
+      transparent 32%,
+      transparent 70%,
+      #1d1713 100%
+    );
+  content: '';
+}
+
+.content {
+  inline-size: min(100%, 90rem);
+  margin-inline: auto;
+  padding: 5rem clamp(1.5rem, 7vw, 7.5rem);
+}
+
+.title {
+  font-family: var(--heading-font);
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.94;
+  letter-spacing: -0.075em;
+}
+
+.title span {
+  display: block;
+  color: var(--accent);
+}
+
+.intro {
+  max-inline-size: 27ch;
+  margin-block: 1.6rem 2.1rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.28rem);
+  line-height: 1.55;
+}
+
+@media (max-width: 44rem) {
+  .screen {
+    align-items: end;
+  }
+
+  .scenery {
+    inset: 0 0 auto;
+    block-size: max(20rem, 58svh);
+  }
+
+  .scenery::after {
+    background: linear-gradient(
+      180deg,
+      #1d1713 9%,
+      transparent 28%,
+      transparent 53%,
+      #1d1713 99%
+    );
+  }
+
+  .content {
+    padding-block: max(17rem, 43svh) clamp(2.25rem, 8vh, 5rem);
+  }
+
+  .title {
+    font-size: clamp(2.85rem, 14vw, 5.6rem);
+  }
+
+  .intro {
+    margin-block: 1.1rem 1.4rem;
+  }
+}

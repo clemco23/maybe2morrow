@@ -26,7 +26,8 @@ L’ancien dépôt est le dossier voisin `../maybetomorrow`. Il sert de référe
 
 - Commencer par un parcours jouable complet avec les illustrations et l’équilibrage d’origine. Utiliser les styles historiques comme référence et adapter les écrans aux petites largeurs.
 - Placer les règles de simulation dans un module JavaScript indépendant du DOM et des sons. Un reducer React peut gérer les actions du joueur. L’interface peut dériver les jauges, les portraits et les stocks depuis le même état de partie. Prévoir des tirages contrôlables pour vérifier les journées et les expéditions.
-- L’état de navigation peut rester local à l’application. L’accueil, la sélection et la partie correspondent aux trois écrans à porter.
+- L’état de navigation peut rester local à l’application. Les écrans sont dans `src/screens/` avec leurs styles CSS Modules. Le catalogue des personnages est dans `src/game/characters.js`.
+- L’accueil donne la priorité à son décor WebP et propose une version plus légère sur mobile. Le code et le décor de la sélection sont chargés à l’ouverture de cet écran. Respecter les dimensions des portraits pour réserver leur espace dès l’affichage.
 - L’ancien jeu tire un événement dès l’ouverture de la partie. Commencer au jour 1 avant le premier tirage est une amélioration proposée. Autres corrections identifiées pendant l’analyse, conserver tous les événements résolus pendant une journée et appliquer la sourdine à la musique comme aux effets.
 - Le comportement de fin de partie reste à définir. L’ancien jeu permet d’avancer après la mort de toute l’équipe, `end.png` est inutilisé et le bouton `QUIT` est présent sans action.
 
@@ -48,6 +49,7 @@ Préserver la casse et les accents des noms de fichiers, notamment `clément.png
 - `npm install` installe les dépendances.
 - `npm run dev` lance le serveur local.
 - `npm run lint` vérifie le JavaScript et le JSX.
+- `npm run format` applique le formatage Prettier aux fichiers de l’application. `npm run format:check` vérifie le formatage.
 - `npm run build` compile l’application pour la production.
 
 Après une modification jouable, vérifier le parcours accueil → sélection de quatre personnages → partie, puis les stocks, l’avancement des jours et le retour de sélection. Pour une modification des règles ou de l’audio, vérifier aussi le cas concerné, par exemple le retour d’expédition ou la sourdine.
