@@ -1,0 +1,217 @@
+.screen {
+  min-block-size: 100svh;
+  padding: clamp(1rem, 3.5vw, 3rem);
+  background:
+    linear-gradient(180deg, #20160dcc, #20160d6e 43%, #20160dd9),
+    url('/assets/set/perso-selected-web.webp') center / cover no-repeat,
+    #21180f;
+}
+
+.layout {
+  display: grid;
+  gap: clamp(1rem, 3vh, 2rem);
+  inline-size: min(100%, 75rem);
+  margin-inline: auto;
+}
+
+.back {
+  justify-self: start;
+}
+
+.panel {
+  display: grid;
+  gap: clamp(1.1rem, 3.3vw, 2.35rem);
+  padding: clamp(1rem, 4vw, 3rem);
+  border: 1px solid #b0875e9c;
+  border-radius: 1.35rem;
+  background: #211811f5;
+  box-shadow: 0 1.5rem 5rem #160d097f;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.8rem 2rem;
+}
+
+.header h1 {
+  font-family: var(--heading-font);
+  font-size: clamp(2.05rem, 5vw, 4.15rem);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.header p {
+  margin-block-start: 0.55rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.count {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #755138;
+  border-radius: 0.4rem;
+  background: #39291d;
+  font-size: 0.88rem;
+}
+
+.count strong {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.5vw, 1.1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  gap: 0.75rem;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: clamp(0.6rem, 1.1vw, 1rem);
+  border: 1px solid #71533e;
+  border-radius: 0.75rem;
+  background: radial-gradient(ellipse at 50% 55%, #6a4630, #312319 77%);
+  color: var(--text);
+}
+
+button.card:not(:disabled):hover {
+  border-color: #d8a966;
+  background: radial-gradient(ellipse at 50% 55%, #82583a, #39291c 77%);
+}
+
+.card[aria-pressed='true'],
+.card[aria-pressed='true']:hover {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.card:disabled .portrait {
+  filter: saturate(0.55);
+}
+
+.portrait {
+  inline-size: 100%;
+  block-size: clamp(7.2rem, 15vw, 13rem);
+  object-fit: contain;
+  filter: drop-shadow(0 0.55rem 0.35rem #170d0a86);
+}
+
+.name {
+  padding-block-end: 0.1rem;
+  font-size: clamp(0.83rem, 1.45vw, 1.08rem);
+  font-weight: 700;
+}
+
+.indicator {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 0.45rem;
+  inset-inline-end: 0.45rem;
+  display: grid;
+  inline-size: 1.45rem;
+  block-size: 1.45rem;
+  place-items: center;
+  border: 1px solid #b58760;
+  border-radius: 50%;
+  background: #342319;
+  color: #f2d0aa;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.card[aria-pressed='true'] .indicator {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.card:disabled .indicator {
+  visibility: hidden;
+}
+
+.actions {
+  display: flex;
+  justify-content: end;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid #71533e;
+}
+
+@media (max-width: 55rem) {
+  .roster {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .portrait {
+    block-size: clamp(7.2rem, 22vw, 11rem);
+  }
+}
+
+@media (max-width: 34rem) {
+  .roster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .actions {
+    justify-content: center;
+  }
+}
+
+@media (max-height: 32rem) and (min-width: 36rem) {
+  .screen {
+    padding: 0.7rem clamp(0.75rem, 3vw, 1.5rem);
+  }
+
+  .layout,
+  .panel {
+    gap: 0.65rem;
+  }
+
+  .panel {
+    padding: 0.75rem clamp(0.75rem, 2vw, 1.35rem);
+  }
+
+  .header h1 {
+    font-size: clamp(1.65rem, 4.65vw, 2.65rem);
+  }
+
+  .header p {
+    margin-block-start: 0.3rem;
+    font-size: 0.88rem;
+  }
+
+  .roster {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(0.45rem, 1.25vw, 0.8rem);
+  }
+
+  .card {
+    gap: 0.3rem;
+    padding: 0.4rem;
+  }
+
+  .portrait {
+    block-size: clamp(4.1rem, 27svh, 8.5rem);
+  }
+
+  .actions {
+    padding-block-start: 0.5rem;
+  }
+}
