@@ -4,6 +4,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Londrina Solid';
+  src: url('/assets/font/LondrinaSolid-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+
 :root {
   font-family: Rubik, system-ui, sans-serif;
   color: #fff5e6;
@@ -13,7 +20,7 @@
   --text: #fff5e6;
   --muted: #d8c4ae;
   --accent: #ffd17a;
-  --heading-font: Georgia, serif;
+  --heading-font: 'Londrina Solid', Impact, sans-serif;
 }
 
 * {
@@ -53,26 +60,31 @@ h1:focus {
 
 .game-button {
   display: inline-flex;
-  min-block-size: 3.25rem;
+  min-inline-size: 10.5rem;
+  min-block-size: 3.5rem;
+  max-inline-size: 100%;
+  aspect-ratio: 610 / 221;
   align-items: center;
   justify-content: center;
-  gap: 1.75rem;
-  padding: 0.75rem 1.45rem;
-  border: 1px solid var(--accent);
-  border-radius: 0.65rem;
-  background: var(--accent);
-  color: var(--ink);
-  font-weight: 700;
-  box-shadow: 0 3px 0 #a3692c;
+  padding: 0.65rem 1.45rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent url('/assets/set/button.png') center / 100% 100%
+    no-repeat;
+  color: var(--text);
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 2px #33190c;
 }
 
 .game-button:hover:not(:disabled) {
-  background: #ffe2a6;
+  filter: brightness(1.15);
 }
 
 .game-button:disabled {
-  border-color: #775f49;
-  background: #443528;
-  color: #d1baa1;
-  box-shadow: none;
+  opacity: 0.58;
 }

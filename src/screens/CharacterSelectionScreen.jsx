@@ -38,7 +38,7 @@ export default function CharacterSelectionScreen({ onBack }) {
     <main className={styles.screen}>
       <div className={styles.layout}>
         <button type="button" className={styles.back} onClick={onBack}>
-          <span aria-hidden="true">←</span> Accueil
+          Accueil
         </button>
 
         <section className={styles.panel} aria-labelledby="selection-title">
@@ -91,7 +91,7 @@ export default function CharacterSelectionScreen({ onBack }) {
                 disabled={!teamIsFull}
                 onClick={confirmTeam}
               >
-                Commencer <span aria-hidden="true">→</span>
+                Commencer
               </button>
             )}
           </div>

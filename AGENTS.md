@@ -37,7 +37,7 @@ L’ancien dépôt est le dossier voisin `../maybetomorrow`. Il sert de référe
 | --- | --- |
 | `public/assets/normal/`, `public/assets/sick/`, `public/assets/death/` | Six portraits dans chacun des trois états |
 | `public/assets/set/` | Décors, éléments d’interface et illustration de fin |
-| `public/assets/font/` | Police Rubik |
+| `public/assets/font/` | Rubik pour le texte et Londrina Solid Black pour les titres et les boutons principaux |
 | `public/audio/` | Musique d’ambiance et effets sonores |
 | `public/webfonts/` | Police Cutive et polices d’icônes Font Awesome |
 | `public/css/all.min.css` | Styles Font Awesome et chemins relatifs vers `../webfonts/` |

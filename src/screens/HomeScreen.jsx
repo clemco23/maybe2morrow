@@ -35,7 +35,7 @@ export default function HomeScreen({ onPlay }) {
           Forme ton équipe et tente de survivre un jour de plus.
         </p>
         <button type="button" className="game-button" onClick={onPlay}>
-          Jouer <span aria-hidden="true">→</span>
+          Jouer
         </button>
       </div>
     </main>

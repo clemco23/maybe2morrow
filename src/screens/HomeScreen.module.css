@@ -51,13 +51,15 @@
 .title {
   font-family: var(--heading-font);
   font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 900;
   line-height: 0.94;
-  letter-spacing: -0.075em;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  text-shadow: 0 0.04em 0 #24160e;
 }
 
 .title span {
   display: block;
-  color: var(--accent);
 }
 
 .intro {
