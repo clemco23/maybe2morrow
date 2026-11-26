@@ -5,6 +5,9 @@ export default function MenuDialog({
   title,
   triggerClassName = 'secondary-button',
   icon,
+  iconOnly = false,
+  onConfirm,
+  confirmLabel,
   children,
 }) {
   const headingId = useId()
@@ -19,13 +22,15 @@ export default function MenuDialog({
         type="button"
         className={triggerClassName}
         aria-haspopup="dialog"
+        aria-label={iconOnly ? title : undefined}
+        title={iconOnly ? title : undefined}
         onClick={() => {
           dialogRef.current.showModal()
           headingRef.current.focus()
         }}
       >
         {icon}
-        {title}
+        {iconOnly ? null : title}
       </button>
 
       <dialog
@@ -45,11 +50,23 @@ export default function MenuDialog({
           <div className={styles.actions}>
             <button
               type="button"
-              className="game-button"
+              className={onConfirm ? 'secondary-button' : 'game-button'}
               onClick={() => dialogRef.current.close()}
             >
-              Fermer
+              {onConfirm ? 'Rester' : 'Fermer'}
             </button>
+            {onConfirm ? (
+              <button
+                type="button"
+                className="game-button"
+                onClick={() => {
+                  dialogRef.current.close()
+                  onConfirm()
+                }}
+              >
+                {confirmLabel}
+              </button>
+            ) : null}
           </div>
         </div>
       </dialog>

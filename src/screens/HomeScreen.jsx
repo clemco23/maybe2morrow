@@ -14,7 +14,7 @@ export default function HomeScreen({ onPlay }) {
     <main className={styles.screen}>
       <picture className={styles.scenery} aria-hidden="true">
         <source
-          media="(max-width: 44rem)"
+          media="(max-width: 44rem), (max-width: 60rem) and (max-height: 34rem)"
           srcSet={
             landingArtPath + '-960.webp 1x, ' + landingArtPath + '.webp 2x'
           }

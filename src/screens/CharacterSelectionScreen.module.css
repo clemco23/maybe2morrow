@@ -173,3 +173,45 @@ button.card:not(:disabled):hover {
     justify-content: center;
   }
 }
+
+@media (max-height: 32rem) and (min-width: 36rem) {
+  .screen {
+    padding: 0.7rem clamp(0.75rem, 3vw, 1.5rem);
+  }
+
+  .layout,
+  .panel {
+    gap: 0.65rem;
+  }
+
+  .panel {
+    padding: 0.75rem clamp(0.75rem, 2vw, 1.35rem);
+  }
+
+  .header h1 {
+    font-size: clamp(1.65rem, 4.65vw, 2.65rem);
+  }
+
+  .header p {
+    margin-block-start: 0.3rem;
+    font-size: 0.88rem;
+  }
+
+  .roster {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(0.45rem, 1.25vw, 0.8rem);
+  }
+
+  .card {
+    gap: 0.3rem;
+    padding: 0.4rem;
+  }
+
+  .portrait {
+    block-size: clamp(4.1rem, 27svh, 8.5rem);
+  }
+
+  .actions {
+    padding-block-start: 0.5rem;
+  }
+}

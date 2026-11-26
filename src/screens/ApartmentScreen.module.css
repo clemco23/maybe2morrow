@@ -1,18 +1,34 @@
 .screen {
+  --room-width: min(100vw, calc(100svh * 1920 / 1081));
+  --room-height: min(100svh, calc(100vw * 1081 / 1920));
+  --horizontal-fade: clamp(1.2rem, calc(var(--room-width) * 0.05), 4.75rem);
+  --vertical-fade: clamp(0.75rem, calc(var(--room-height) * 0.05), 3.25rem);
   position: relative;
   isolation: isolate;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
   min-block-size: 100svh;
-  gap: clamp(0.6rem, 2vh, 1.15rem);
+  overflow: clip;
   padding: clamp(0.75rem, 2.8vw, 2.75rem);
   background: #462818;
 }
 
+.ambientBackdrop,
 .backdrop,
 .screen::before {
   position: absolute;
   inset: 0;
+}
+
+.ambientBackdrop {
+  z-index: -3;
+  filter: blur(clamp(0.75rem, 2vw, 1.9rem)) brightness(0.73);
+  transform: scale(1.045);
+}
+
+.ambientBackdrop img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: fill;
 }
 
 .backdrop {
@@ -20,11 +36,42 @@
 }
 
 .backdrop img {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  object-position: center bottom;
+  translate: -50% -50%;
+  inline-size: var(--room-width);
+  block-size: var(--room-height);
+  object-fit: contain;
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #0002 calc(var(--horizontal-fade) * 0.22),
+      #0009 calc(var(--horizontal-fade) * 0.55),
+      #000e calc(var(--horizontal-fade) * 0.82),
+      black var(--horizontal-fade),
+      black calc(100% - var(--horizontal-fade)),
+      #000e calc(100% - var(--horizontal-fade) * 0.82),
+      #0009 calc(100% - var(--horizontal-fade) * 0.55),
+      #0002 calc(100% - var(--horizontal-fade) * 0.22),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #0002 calc(var(--vertical-fade) * 0.22),
+      #0009 calc(var(--vertical-fade) * 0.55),
+      #000e calc(var(--vertical-fade) * 0.82),
+      black var(--vertical-fade),
+      black calc(100% - var(--vertical-fade)),
+      #000e calc(100% - var(--vertical-fade) * 0.82),
+      #0009 calc(100% - var(--vertical-fade) * 0.55),
+      #0002 calc(100% - var(--vertical-fade) * 0.22),
+      transparent
+    );
+  mask-composite: intersect;
 }
 
 .screen::before {
@@ -42,7 +89,7 @@
 .toolbar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  grid-template-areas: 'settings title edit';
+  grid-template-areas: 'quit title controls';
   align-items: start;
   gap: 0.6rem 1rem;
 }
@@ -62,77 +109,195 @@
     0 0.13em 0.22em #20110a;
 }
 
-.settingsControl {
-  grid-area: settings;
+.quitControl {
+  grid-area: quit;
   justify-self: start;
 }
 
-.editControl {
-  grid-area: edit;
-  justify-self: end;
-}
-
-.plaque {
+.exitIcon {
   position: relative;
-  min-inline-size: 0;
-  inline-size: clamp(8.4rem, 12vw, 11.5rem);
-  min-block-size: 3rem;
-  gap: 0.4rem;
-  padding: 0.45rem 0.95rem;
-  font-size: clamp(0.98rem, 1.48vw, 1.36rem);
-  text-wrap: balance;
-  filter: drop-shadow(0 0.24rem 0.15rem #1a0d09a6);
+  inline-size: 1.25rem;
+  block-size: 1.05rem;
+  background: linear-gradient(currentColor, currentColor) right 0.12rem center /
+    0.7rem 0.125rem no-repeat;
 }
 
-.plaque:hover:not(:disabled) {
-  filter: brightness(1.15) drop-shadow(0 0.24rem 0.15rem #1a0d09a6);
+.exitIcon::before,
+.exitIcon::after {
+  position: absolute;
+  content: '';
 }
 
-.help {
+.exitIcon::before {
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 0.56rem;
+  border: 2px solid currentColor;
+  border-inline-end: 0;
+  border-radius: 0.12rem 0 0 0.12rem;
+}
+
+.exitIcon::after {
+  inset-block-start: 50%;
+  inset-inline-end: 0.1rem;
+  inline-size: 0.44rem;
+  block-size: 0.44rem;
+  border-block-start: 2px solid currentColor;
+  border-inline-end: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.controls {
+  grid-area: controls;
   justify-self: end;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.iconButton {
+  display: grid;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  padding: 0;
+  place-items: center;
+  border: 1px solid #c48e5b;
+  border-radius: 0.5rem;
+  background: #462a18 url('/assets/set/button.png') center / auto 100% no-repeat;
+  color: var(--text);
+  font-family: var(--heading-font);
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 1px 2px #28140a;
+  box-shadow: 0 0.2rem 0.4rem #1a0d09a6;
+}
+
+.iconButton:hover {
+  filter: brightness(1.15);
 }
 
 .team {
+  --portrait-height: clamp(5rem, calc(var(--room-height) * 0.44), 24rem);
+  position: absolute;
+  inset-inline-start: calc(50% + var(--room-width) * 0.024);
+  inset-block-end: calc(
+    (100% - var(--room-height)) / 2 + var(--room-height) * 0.032
+  );
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: end;
-  align-self: end;
-  justify-self: center;
-  inline-size: min(100%, 52rem);
-  gap: clamp(0.2rem, 1.5vw, 1.1rem);
-  margin: 0 0 clamp(0.4rem, 2.5vh, 2rem);
+  inline-size: calc(var(--room-width) * 0.46);
+  gap: clamp(0.2rem, calc(var(--room-width) * 0.009), 0.9rem);
+  margin: 0;
   padding: 0;
   list-style: none;
+  translate: -50% 0;
 }
 
 .character {
+  --portrait-scale: 1;
   display: grid;
   justify-items: center;
   gap: 0.35rem;
   inline-size: 100%;
 }
 
-.character img {
+.character:first-child,
+.character:last-child {
+  --portrait-scale: 0.91;
+  margin-block-end: clamp(0.4rem, calc(var(--room-height) * 0.029), 1.75rem);
+}
+
+.character:nth-child(3) {
+  --portrait-scale: 0.97;
+  margin-block-end: clamp(0.25rem, calc(var(--room-height) * 0.014), 1rem);
+}
+
+.avatar {
+  position: relative;
+  isolation: isolate;
+  inline-size: 112%;
+}
+
+.castShadow,
+.avatar::after {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.castShadow {
+  inset: 0;
+  filter: blur(clamp(0.14rem, 0.38vw, 0.36rem));
+}
+
+.castShadow::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #211107a3, #21110765 55%, #21110714);
+  mask: var(--portrait-mask) center bottom / contain no-repeat;
+  transform: translate(0.2rem, 0.12rem) skewX(34deg) scaleY(-0.16);
+  transform-origin: center bottom;
+  content: '';
+}
+
+.avatar::after {
+  inset-inline-start: 50%;
+  content: '';
+  inset-block-end: -0.45rem;
+  inline-size: 58%;
+  block-size: clamp(0.7rem, 2.3svh, 1.35rem);
+  translate: -50% 0;
+  background: radial-gradient(
+    ellipse,
+    #1b0d06db,
+    #1b0d0666 42%,
+    transparent 74%
+  );
+}
+
+.avatar img {
   display: block;
   inline-size: 100%;
-  block-size: clamp(8rem, 35svh, 20rem);
+  block-size: calc(var(--portrait-height) * var(--portrait-scale));
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 0.55rem 0.42rem #21120bd9);
 }
 
 .character span {
+  position: relative;
   max-inline-size: 100%;
-  padding: 0.28rem clamp(0.18rem, 1.15vw, 0.8rem);
+  padding: 0.25rem clamp(0.18rem, calc(var(--room-width) * 0.005), 0.65rem);
   border: 1px solid #b5825c;
   border-radius: 0.4rem;
   background: #25160ff2;
   color: var(--text);
-  font-size: clamp(0.75rem, 2.4vw, 1rem);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  font-size: clamp(0.7rem, calc(var(--room-width) * 0.019), 1rem);
   text-align: center;
-  overflow-wrap: anywhere;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.character:focus-visible {
+  border-radius: 0.35rem;
+  outline: 2px solid var(--accent);
+  outline-offset: 0.25rem;
+}
+
+.character:focus-visible span {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .character:hover span {
+    opacity: 1;
+  }
+}
+
+.dialogCopy,
 .rulesIntro,
 .rules dd {
   color: var(--muted);
@@ -159,23 +324,21 @@
   margin: 0;
 }
 
-@media (max-width: 44rem) {
+@media (max-width: 34rem) {
   .toolbar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
-      'settings edit'
+      'quit controls'
       'title title';
   }
+}
 
-  .plaque {
-    inline-size: min(100%, 8.4rem);
+@media (max-height: 32rem) {
+  .screen {
+    padding: clamp(0.55rem, 2.25vh, 1rem);
   }
 
-  .team {
-    margin-block-end: clamp(0.3rem, 2vh, 1rem);
-  }
-
-  .character img {
-    block-size: clamp(7.75rem, 24svh, 11rem);
+  .title {
+    font-size: clamp(1.5rem, 3.6vw, 2.25rem);
   }
 }

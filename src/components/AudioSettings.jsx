@@ -4,12 +4,14 @@ import styles from './AudioSettings.module.css'
 export default function AudioSettings({
   settings,
   onChange,
+  iconOnly = false,
   triggerClassName = 'secondary-button ' + styles.trigger,
 }) {
   return (
     <MenuDialog
       title="Paramètres"
       triggerClassName={triggerClassName}
+      iconOnly={iconOnly}
       icon={
         <span className={styles.gear} aria-hidden="true">
           ⚙︎

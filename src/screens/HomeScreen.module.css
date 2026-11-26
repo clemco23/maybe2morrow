@@ -70,35 +70,18 @@
   line-height: 1.55;
 }
 
-@media (max-width: 44rem) {
-  .screen {
-    align-items: end;
-  }
-
-  .scenery {
-    inset: 0 0 auto;
-    block-size: max(20rem, 58svh);
-  }
-
-  .scenery::after {
-    background: linear-gradient(
-      180deg,
-      #1d1713 9%,
-      transparent 28%,
-      transparent 53%,
-      #1d1713 99%
-    );
-  }
-
+@media (max-height: 32rem) {
   .content {
-    padding-block: max(17rem, 43svh) clamp(2.25rem, 8vh, 5rem);
+    padding-block: clamp(0.85rem, 4svh, 2rem);
+    padding-inline: clamp(1rem, 5vw, 4rem);
   }
 
   .title {
-    font-size: clamp(2.85rem, 14vw, 5.6rem);
+    font-size: clamp(2.25rem, min(8vw, 17svh), 4.65rem);
   }
 
   .intro {
-    margin-block: 1.1rem 1.4rem;
+    margin-block: 0.65rem 1rem;
+    font-size: clamp(0.9rem, 2.9svh, 1.05rem);
   }
 }

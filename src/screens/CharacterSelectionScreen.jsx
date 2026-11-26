@@ -2,14 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { CHARACTERS, TEAM_SIZE } from '../game/characters.js'
 import styles from './CharacterSelectionScreen.module.css'
 
-export default function CharacterSelectionScreen({
-  initialTeam,
-  onBack,
-  onStart,
-}) {
-  const [selectedIds, setSelectedIds] = useState(() =>
-    initialTeam.map((character) => character.id),
-  )
+export default function CharacterSelectionScreen({ onBack, onStart }) {
+  const [selectedIds, setSelectedIds] = useState([])
   const titleRef = useRef(null)
   const teamIsFull = selectedIds.length === TEAM_SIZE
 

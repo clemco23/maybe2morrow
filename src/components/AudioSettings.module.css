@@ -7,7 +7,7 @@
 
 .gear {
   color: var(--accent);
-  font-size: 1.15rem;
+  font-size: 1.15em;
   line-height: 1;
 }
 
@@ -77,4 +77,11 @@
 .sound input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+@media (max-height: 32rem) and (min-width: 36rem) {
+  .trigger {
+    inset-block-start: 0.7rem;
+    inset-inline-end: clamp(0.75rem, 3vw, 1.5rem);
+  }
 }
