@@ -1,19 +1,64 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
+import { getGameSoundCues } from '../audio/getGameSoundCues.js'
 import AudioSettings from '../components/AudioSettings.jsx'
+import GameRules from '../components/GameRules.jsx'
 import MenuDialog from '../components/MenuDialog.jsx'
+import { gameReducer } from '../game/survival.js'
+import ApartmentCharacter from './ApartmentCharacter.jsx'
 import styles from './ApartmentScreen.module.css'
 
 const backdropPath = import.meta.env.BASE_URL + 'assets/set/background-web'
 
-export default function ApartmentScreen({ team, audioSettings, onQuit }) {
+const provisions = [
+  { resource: 'food', label: 'Nourriture', icon: '🥫' },
+  { resource: 'water', label: 'Eau', icon: '💧' },
+  { resource: 'medicine', label: 'Soins', icon: '✚' },
+]
+
+export default function ApartmentScreen({
+  initialGame,
+  audioSettings,
+  playGameSounds,
+  onQuit,
+}) {
   const titleRef = useRef(null)
+  const journalRef = useRef(null)
+  const [game, dispatch] = useReducer(gameReducer, initialGame)
+  const previousGame = useRef(game)
 
   useEffect(() => {
     titleRef.current.focus()
   }, [])
 
+  useEffect(() => {
+    journalRef.current.scrollTop = 0
+  }, [game.day])
+
+  useEffect(() => {
+    if (previousGame.current === game) return
+
+    const cues = getGameSoundCues(previousGame.current, game)
+    previousGame.current = game
+    playGameSounds(cues)
+  }, [game, playGameSounds])
+
+  function advanceDay() {
+    dispatch({
+      type: 'next-day',
+      rolls: {
+        event: Math.random(),
+        target: Math.random(),
+        loss: Math.random(),
+      },
+    })
+  }
+
+  function spendProvision(characterId, resource) {
+    dispatch({ type: 'use-provision', characterId, resource })
+  }
+
   return (
-    <main className={styles.screen}>
+    <main className={styles.screen} aria-label="L’appartement">
       <RoomBackdrop className={styles.ambientBackdrop} />
       <RoomBackdrop className={styles.backdrop} priority="high" />
 
@@ -28,9 +73,23 @@ export default function ApartmentScreen({ team, audioSettings, onQuit }) {
         >
           <p className={styles.dialogCopy}>Tu reviendras à l’accueil.</p>
         </MenuDialog>
-        <h1 ref={titleRef} tabIndex={-1} className={styles.title}>
-          L’appartement
-        </h1>
+        <div className={styles.dayPanel}>
+          <h1 ref={titleRef} tabIndex={-1} className={styles.title}>
+            Jour {game.day}
+          </h1>
+          <ul
+            className={styles.stocks}
+            aria-label="Provisions communes"
+            role="list"
+          >
+            {provisions.map(({ resource, label, icon }) => (
+              <li key={resource}>
+                <span aria-hidden="true">{icon}</span> {label}{' '}
+                <strong>{game.stock[resource]}</strong>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div
           className={styles.controls}
           role="group"
@@ -41,70 +100,45 @@ export default function ApartmentScreen({ team, audioSettings, onQuit }) {
             triggerClassName={styles.iconButton}
             iconOnly
           />
-          <MenuDialog
-            title="Règles du jeu"
-            triggerClassName={styles.iconButton}
-            iconOnly
-            icon={<span aria-hidden="true">?</span>}
-          >
-            <p className={styles.rulesIntro}>
-              Voici les règles prévues pour la partie.
-            </p>
-            <dl className={styles.rules} tabIndex={0}>
-              <div>
-                <dt>Survivre au confinement</dt>
-                <dd>
-                  Garde le plus d’amis possible en vie. Le confinement prend fin
-                  à une date inconnue entre les jours 15 et 55. Si toute
-                  l’équipe est perdue, la partie s’arrête.
-                </dd>
-              </div>
-              <div>
-                <dt>Gérer les provisions</dt>
-                <dd>
-                  Répartis l’eau et la nourriture et garde des soins pour les
-                  personnages malades. Les stocks sont communs à l’équipe.
-                </dd>
-              </div>
-              <div>
-                <dt>Passer au jour suivant</dt>
-                <dd>
-                  Chaque jour peut apporter un incident. Choisis comment réagir
-                  et surveille aussi le moral du groupe.
-                </dd>
-              </div>
-              <div>
-                <dt>Partir en expédition</dt>
-                <dd>
-                  Envoyer quelqu’un dehors peut rapporter des provisions ou des
-                  objets. Le personnage peut aussi revenir malade ou
-                  disparaître.
-                </dd>
-              </div>
-            </dl>
-          </MenuDialog>
+          <GameRules triggerClassName={styles.iconButton} />
         </div>
       </header>
 
       <ul className={styles.team} aria-label="Ton équipe" role="list">
-        {team.map((character) => (
-          <li key={character.id} className={styles.character} tabIndex={0}>
-            <div
-              className={styles.avatar}
-              style={{ '--portrait-mask': 'url("' + character.portrait + '")' }}
-            >
-              <div className={styles.castShadow} aria-hidden="true" />
-              <img
-                src={character.portrait}
-                alt=""
-                width={character.width}
-                height={character.height}
-              />
-            </div>
-            <span>{character.name}</span>
-          </li>
+        {game.characters.map((character) => (
+          <ApartmentCharacter
+            key={character.id}
+            character={character}
+            game={game}
+            onUseProvision={spendProvision}
+          />
         ))}
       </ul>
+
+      <div
+        ref={journalRef}
+        className={styles.journal}
+        role="log"
+        aria-label="Journal de la journée"
+        tabIndex={0}
+      >
+        <p className={styles.journalTitle}>Journal</p>
+        <ul key={game.day}>
+          {game.log.map((entry, index) => (
+            <li key={index}>{entry}</li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        type="button"
+        data-game-action=""
+        className={'game-button ' + styles.nextDay}
+        disabled={Boolean(game.outcome)}
+        onClick={advanceDay}
+      >
+        {game.outcome ? 'Partie terminée' : 'Jour suivant'}
+      </button>
     </main>
   )
 }
