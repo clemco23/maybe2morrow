@@ -40,6 +40,11 @@ export default function AudioSettings({
           value={settings.clickVolume}
           onChange={(clickVolume) => onChange({ clickVolume })}
         />
+        <VolumeControl
+          label="Effets du jeu"
+          value={settings.effectsVolume}
+          onChange={(effectsVolume) => onChange({ effectsVolume })}
+        />
       </fieldset>
     </MenuDialog>
   )

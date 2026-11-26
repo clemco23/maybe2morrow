@@ -1,0 +1,75 @@
+.screen {
+  position: relative;
+  display: grid;
+  min-block-size: 100svh;
+  place-items: center;
+  overflow: hidden;
+  background: #100c09;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.controls {
+  position: absolute;
+  inset-block-end: clamp(0.75rem, 3vw, 2rem);
+  inset-inline-end: clamp(0.75rem, 3vw, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+.iconButton {
+  display: grid;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  padding: 0;
+  place-items: center;
+  border: 1px solid #c48e5b;
+  border-radius: 0.5rem;
+  background: #462a18 url('/assets/set/button.png') center / auto 100% no-repeat;
+  color: var(--text);
+  font-family: 'Intro Icons';
+  font-size: 1.2rem;
+  line-height: 1;
+  text-shadow: 0 1px 2px #28140a;
+  box-shadow: 0 0.2rem 0.4rem #1a0d09a6;
+}
+
+.iconButton:hover {
+  filter: brightness(1.15);
+}
+
+.volumeIcon::before {
+  content: '\f028';
+}
+
+.mutedIcon::before {
+  content: '\f6a9';
+}
+
+.skipIcon::before {
+  content: '\f051';
+}
+
+.playIcon::before {
+  content: '\f04b';
+}
+
+.play {
+  position: relative;
+  inline-size: 4rem;
+  block-size: 4rem;
+  font-size: 1.6rem;
+}
+@font-face {
+  font-family: 'Intro Icons';
+  src: url('/webfonts/fa-solid-900.woff2') format('woff2');
+  font-display: block;
+}
