@@ -16,18 +16,6 @@
 
 .back {
   justify-self: start;
-  display: inline-flex;
-  min-block-size: 2.75rem;
-  align-items: center;
-  padding-inline: 0.9rem;
-  border: 1px solid #e7c39a65;
-  border-radius: 0.5rem;
-  background: #21170ed9;
-  color: var(--text);
-}
-
-.back:hover {
-  background: #4b3321;
 }
 
 .panel {
@@ -80,19 +68,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-.roster,
-.team {
+.roster {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(0.5rem, 1.5vw, 1.1rem);
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.team {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  inline-size: min(100%, 51rem);
 }
 
 .card {
@@ -183,8 +165,7 @@ button.card:not(:disabled):hover {
 }
 
 @media (max-width: 34rem) {
-  .roster,
-  .team {
+  .roster {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

@@ -3,58 +3,12 @@
   z-index: 1;
   inset-block-start: clamp(1rem, 3.5vw, 3rem);
   inset-inline-end: clamp(1rem, 3.5vw, 3rem);
-  display: inline-flex;
-  min-block-size: 2.75rem;
-  align-items: center;
-  gap: 0.55rem;
-  padding-inline: 0.9rem;
-  border: 1px solid #e7c39a65;
-  border-radius: 0.5rem;
-  background: #21170eea;
-  color: var(--text);
-}
-
-.trigger:hover {
-  background: #4b3321;
 }
 
 .gear {
   color: var(--accent);
   font-size: 1.15rem;
   line-height: 1;
-}
-
-.dialog {
-  inline-size: min(28rem, calc(100% - 2rem));
-  max-block-size: calc(100% - 2rem);
-  padding: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  border: 1px solid #b0875e9c;
-  border-radius: 1.15rem;
-  background: #211811;
-  color: var(--text);
-  box-shadow: 0 1.5rem 5rem #160d09a6;
-}
-
-.dialog::backdrop {
-  background: #130c09b8;
-}
-
-.content {
-  display: grid;
-  gap: 1.35rem;
-  padding: clamp(1rem, 5vw, 2rem);
-}
-
-.content h2 {
-  margin: 0;
-  font-family: var(--heading-font);
-  font-size: clamp(2rem, 7vw, 3rem);
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
 }
 
 .sound {
@@ -123,9 +77,4 @@
 .sound input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
-}
-
-.actions {
-  display: flex;
-  justify-content: end;
 }

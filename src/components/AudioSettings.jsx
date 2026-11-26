@@ -1,73 +1,45 @@
-import { useRef } from 'react'
+import MenuDialog from './MenuDialog.jsx'
 import styles from './AudioSettings.module.css'
 
-export default function AudioSettings({ settings, onChange }) {
-  const dialogRef = useRef(null)
-  const triggerRef = useRef(null)
-
+export default function AudioSettings({
+  settings,
+  onChange,
+  triggerClassName = 'secondary-button ' + styles.trigger,
+}) {
   return (
-    <>
-      <button
-        ref={triggerRef}
-        type="button"
-        className={styles.trigger}
-        aria-haspopup="dialog"
-        onClick={() => dialogRef.current.showModal()}
-      >
+    <MenuDialog
+      title="Paramètres"
+      triggerClassName={triggerClassName}
+      icon={
         <span className={styles.gear} aria-hidden="true">
           ⚙︎
         </span>
-        Paramètres
-      </button>
+      }
+    >
+      <fieldset className={styles.sound}>
+        <legend>Son</legend>
 
-      <dialog
-        ref={dialogRef}
-        className={styles.dialog}
-        aria-labelledby="audio-settings-title"
-        onClose={() => triggerRef.current.focus()}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) event.currentTarget.close()
-        }}
-      >
-        <div className={styles.content}>
-          <h2 id="audio-settings-title">Paramètres</h2>
+        <label className={styles.mute}>
+          Couper le son
+          <input
+            type="checkbox"
+            checked={settings.muted}
+            onChange={(event) => onChange({ muted: event.target.checked })}
+          />
+        </label>
 
-          <fieldset className={styles.sound}>
-            <legend>Son</legend>
-
-            <label className={styles.mute}>
-              Couper le son
-              <input
-                type="checkbox"
-                checked={settings.muted}
-                onChange={(event) => onChange({ muted: event.target.checked })}
-              />
-            </label>
-
-            <VolumeControl
-              label="Musique d’ambiance"
-              value={settings.musicVolume}
-              onChange={(musicVolume) => onChange({ musicVolume })}
-            />
-            <VolumeControl
-              label="Sons des menus"
-              value={settings.clickVolume}
-              onChange={(clickVolume) => onChange({ clickVolume })}
-            />
-          </fieldset>
-
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className="game-button"
-              onClick={() => dialogRef.current.close()}
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      </dialog>
-    </>
+        <VolumeControl
+          label="Musique d’ambiance"
+          value={settings.musicVolume}
+          onChange={(musicVolume) => onChange({ musicVolume })}
+        />
+        <VolumeControl
+          label="Sons des menus"
+          value={settings.clickVolume}
+          onChange={(clickVolume) => onChange({ clickVolume })}
+        />
+      </fieldset>
+    </MenuDialog>
   )
 }
 

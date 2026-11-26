@@ -2,15 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import { CHARACTERS, TEAM_SIZE } from '../game/characters.js'
 import styles from './CharacterSelectionScreen.module.css'
 
-export default function CharacterSelectionScreen({ onBack }) {
-  const [selectedIds, setSelectedIds] = useState([])
-  const [confirmed, setConfirmed] = useState(false)
+export default function CharacterSelectionScreen({
+  initialTeam,
+  onBack,
+  onStart,
+}) {
+  const [selectedIds, setSelectedIds] = useState(() =>
+    initialTeam.map((character) => character.id),
+  )
   const titleRef = useRef(null)
   const teamIsFull = selectedIds.length === TEAM_SIZE
 
   useEffect(() => {
     titleRef.current.focus()
-  }, [confirmed])
+  }, [])
 
   function toggleCharacter(id) {
     setSelectedIds((currentIds) => {
@@ -22,22 +27,23 @@ export default function CharacterSelectionScreen({ onBack }) {
     })
   }
 
-  function confirmTeam() {
-    if (teamIsFull) {
-      setConfirmed(true)
-    }
-  }
+  function startGame() {
+    if (!teamIsFull) return
 
-  const visibleCharacters = confirmed
-    ? selectedIds.map((id) =>
-        CHARACTERS.find((character) => character.id === id),
-      )
-    : CHARACTERS
+    const team = selectedIds.map((id) =>
+      CHARACTERS.find((character) => character.id === id),
+    )
+    onStart(team)
+  }
 
   return (
     <main className={styles.screen}>
       <div className={styles.layout}>
-        <button type="button" className={styles.back} onClick={onBack}>
+        <button
+          type="button"
+          className={'secondary-button ' + styles.back}
+          onClick={onBack}
+        >
           Accueil
         </button>
 
@@ -45,55 +51,44 @@ export default function CharacterSelectionScreen({ onBack }) {
           <div className={styles.header}>
             <div>
               <h1 id="selection-title" ref={titleRef} tabIndex={-1}>
-                {confirmed ? 'Ton équipe est prête' : 'Forme ton équipe'}
+                Forme ton équipe
               </h1>
-              {confirmed ? null : (
-                <p>Choisis {TEAM_SIZE} personnages pour commencer.</p>
-              )}
+              <p>Choisis {TEAM_SIZE} personnages pour commencer.</p>
             </div>
-            {confirmed ? null : (
-              <p className={styles.count} role="status" aria-atomic="true">
-                <strong>
-                  {selectedIds.length} / {TEAM_SIZE}
-                </strong>{' '}
-                sélectionnés
-              </p>
-            )}
+            <p className={styles.count} role="status" aria-atomic="true">
+              <strong>
+                {selectedIds.length} / {TEAM_SIZE}
+              </strong>{' '}
+              sélectionnés
+            </p>
           </div>
 
-          <ul className={confirmed ? styles.team : styles.roster}>
-            {visibleCharacters.map((character) => (
-              <li key={character.id}>
-                <CharacterCard
-                  character={character}
-                  selected={selectedIds.includes(character.id)}
-                  confirmed={confirmed}
-                  disabled={teamIsFull && !selectedIds.includes(character.id)}
-                  onToggle={() => toggleCharacter(character.id)}
-                />
-              </li>
-            ))}
+          <ul className={styles.roster}>
+            {CHARACTERS.map((character) => {
+              const selected = selectedIds.includes(character.id)
+
+              return (
+                <li key={character.id}>
+                  <CharacterCard
+                    character={character}
+                    selected={selected}
+                    disabled={teamIsFull && !selected}
+                    onToggle={() => toggleCharacter(character.id)}
+                  />
+                </li>
+              )
+            })}
           </ul>
 
           <div className={styles.actions}>
-            {confirmed ? (
-              <button
-                type="button"
-                className="game-button"
-                onClick={() => setConfirmed(false)}
-              >
-                Modifier l’équipe
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="game-button"
-                disabled={!teamIsFull}
-                onClick={confirmTeam}
-              >
-                Commencer
-              </button>
-            )}
+            <button
+              type="button"
+              className="game-button"
+              disabled={!teamIsFull}
+              onClick={startGame}
+            >
+              Commencer
+            </button>
           </div>
         </section>
       </div>
@@ -101,24 +96,7 @@ export default function CharacterSelectionScreen({ onBack }) {
   )
 }
 
-function CharacterCard({ character, selected, confirmed, disabled, onToggle }) {
-  const portrait = (
-    <>
-      <img
-        className={styles.portrait}
-        src={character.portrait}
-        alt=""
-        width={character.width}
-        height={character.height}
-      />
-      <span className={styles.name}>{character.name}</span>
-    </>
-  )
-
-  if (confirmed) {
-    return <div className={styles.card}>{portrait}</div>
-  }
-
+function CharacterCard({ character, selected, disabled, onToggle }) {
   return (
     <button
       type="button"
@@ -130,7 +108,14 @@ function CharacterCard({ character, selected, confirmed, disabled, onToggle }) {
       <span className={styles.indicator} aria-hidden="true">
         {selected ? '✓' : '+'}
       </span>
-      {portrait}
+      <img
+        className={styles.portrait}
+        src={character.portrait}
+        alt=""
+        width={character.width}
+        height={character.height}
+      />
+      <span className={styles.name}>{character.name}</span>
     </button>
   )
 }

@@ -1,0 +1,181 @@
+.screen {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-block-size: 100svh;
+  gap: clamp(0.6rem, 2vh, 1.15rem);
+  padding: clamp(0.75rem, 2.8vw, 2.75rem);
+  background: #462818;
+}
+
+.backdrop,
+.screen::before {
+  position: absolute;
+  inset: 0;
+}
+
+.backdrop {
+  z-index: -2;
+}
+
+.backdrop img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.screen::before {
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #21120873,
+    transparent 24%,
+    transparent 73%,
+    #21120875
+  );
+  content: '';
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: 'settings title edit';
+  align-items: start;
+  gap: 0.6rem 1rem;
+}
+
+.title {
+  grid-area: title;
+  align-self: center;
+  font-family: var(--heading-font);
+  font-size: clamp(2.05rem, 4vw, 4rem);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow:
+    0 0.08em 0 #321b11,
+    0 0.13em 0.22em #20110a;
+}
+
+.settingsControl {
+  grid-area: settings;
+  justify-self: start;
+}
+
+.editControl {
+  grid-area: edit;
+  justify-self: end;
+}
+
+.plaque {
+  position: relative;
+  min-inline-size: 0;
+  inline-size: clamp(8.4rem, 12vw, 11.5rem);
+  min-block-size: 3rem;
+  gap: 0.4rem;
+  padding: 0.45rem 0.95rem;
+  font-size: clamp(0.98rem, 1.48vw, 1.36rem);
+  text-wrap: balance;
+  filter: drop-shadow(0 0.24rem 0.15rem #1a0d09a6);
+}
+
+.plaque:hover:not(:disabled) {
+  filter: brightness(1.15) drop-shadow(0 0.24rem 0.15rem #1a0d09a6);
+}
+
+.help {
+  justify-self: end;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  align-self: end;
+  justify-self: center;
+  inline-size: min(100%, 52rem);
+  gap: clamp(0.2rem, 1.5vw, 1.1rem);
+  margin: 0 0 clamp(0.4rem, 2.5vh, 2rem);
+  padding: 0;
+  list-style: none;
+}
+
+.character {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  inline-size: 100%;
+}
+
+.character img {
+  display: block;
+  inline-size: 100%;
+  block-size: clamp(8rem, 35svh, 20rem);
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.55rem 0.42rem #21120bd9);
+}
+
+.character span {
+  max-inline-size: 100%;
+  padding: 0.28rem clamp(0.18rem, 1.15vw, 0.8rem);
+  border: 1px solid #b5825c;
+  border-radius: 0.4rem;
+  background: #25160ff2;
+  color: var(--text);
+  font-size: clamp(0.75rem, 2.4vw, 1rem);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.rulesIntro,
+.rules dd {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.rulesIntro {
+  margin-block-end: 0.95rem;
+}
+
+.rules {
+  display: grid;
+  gap: 0.95rem;
+  margin: 0;
+}
+
+.rules dt {
+  margin-block-end: 0.2rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.rules dd {
+  margin: 0;
+}
+
+@media (max-width: 44rem) {
+  .toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'settings edit'
+      'title title';
+  }
+
+  .plaque {
+    inline-size: min(100%, 8.4rem);
+  }
+
+  .team {
+    margin-block-end: clamp(0.3rem, 2vh, 1rem);
+  }
+
+  .character img {
+    block-size: clamp(7.75rem, 24svh, 11rem);
+  }
+}
