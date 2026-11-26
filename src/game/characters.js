@@ -1,4 +1,5 @@
-const portraitDirectory = import.meta.env.BASE_URL + 'assets/normal/'
+const assetsDirectory = import.meta.env.BASE_URL + 'assets/'
+const portraitDirectory = assetsDirectory + 'normal/'
 
 export const TEAM_SIZE = 4
 
@@ -46,3 +47,13 @@ export const CHARACTERS = [
     height: 377,
   },
 ]
+
+export function getCharacterPortrait(character) {
+  if (character.status === 'healthy') return character.portrait
+
+  const folder = character.status === 'sick' ? 'sick' : 'death'
+  const filename = character.portrait.split('/').at(-1)
+  return (
+    assetsDirectory + folder + '/' + filename.replace('.png', folder + '.png')
+  )
+}

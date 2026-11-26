@@ -6,9 +6,11 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react'
-import { useMenuAudio } from './audio/useMenuAudio.js'
+import { useGameAudio } from './audio/useGameAudio.js'
 import AudioSettings from './components/AudioSettings.jsx'
+import { createGame } from './game/survival.js'
 import HomeScreen from './screens/HomeScreen.jsx'
+import IntroScreen from './screens/IntroScreen.jsx'
 
 const CharacterSelectionScreen = lazy(
   () => import('./screens/CharacterSelectionScreen.jsx'),
@@ -30,11 +32,18 @@ function isLandscape() {
 export default function App() {
   const landscape = useSyncExternalStore(subscribeToOrientation, isLandscape)
   const [hasEnteredLandscape, setHasEnteredLandscape] = useState(landscape)
-  const [screen, setScreen] = useState('home')
-  const [team, setTeam] = useState([])
+  const [screen, setScreen] = useState('intro')
+  const [initialGame, setInitialGame] = useState(null)
   const menuRef = useRef(null)
   const rotationTitleRef = useRef(null)
-  const { settings, updateSettings, handleMenuClick } = useMenuAudio()
+  const {
+    settings,
+    updateSettings,
+    handleClick,
+    playMenuError,
+    playGameSounds,
+    stopGameSounds,
+  } = useGameAudio()
   const audioSettings = { settings, onChange: updateSettings }
 
   if (landscape && !hasEnteredLandscape) {
@@ -49,12 +58,13 @@ export default function App() {
   }, [landscape])
 
   function enterApartment(selectedTeam) {
-    setTeam(selectedTeam)
+    setInitialGame(createGame(selectedTeam, Math.random()))
     setScreen('apartment')
   }
 
   function quitApartment() {
-    setTeam([])
+    stopGameSounds()
+    setInitialGame(null)
     setScreen('home')
   }
 
@@ -80,9 +90,9 @@ export default function App() {
           className="menu"
           hidden={!landscape}
           inert={!landscape}
-          onClickCapture={handleMenuClick}
+          onClickCapture={screen === 'intro' ? undefined : handleClick}
         >
-          {screen === 'apartment' ? null : <AudioSettings {...audioSettings} />}
+          {screen === 'selection' ? <AudioSettings {...audioSettings} /> : null}
 
           <Suspense
             fallback={
@@ -91,17 +101,31 @@ export default function App() {
               </main>
             }
           >
-            {screen === 'home' ? (
-              <HomeScreen onPlay={() => setScreen('selection')} />
+            {screen === 'intro' ? (
+              <IntroScreen
+                landscape={landscape}
+                onSkip={(event) => {
+                  handleClick(event)
+                  setScreen('home')
+                }}
+                onFinish={() => setScreen('home')}
+              />
+            ) : screen === 'home' ? (
+              <HomeScreen
+                onPlay={() => setScreen('selection')}
+                audioSettings={audioSettings}
+              />
             ) : screen === 'selection' ? (
               <CharacterSelectionScreen
                 onBack={() => setScreen('home')}
                 onStart={enterApartment}
+                onSelectionLimit={playMenuError}
               />
             ) : (
               <ApartmentScreen
-                team={team}
+                initialGame={initialGame}
                 audioSettings={audioSettings}
+                playGameSounds={playGameSounds}
                 onQuit={quitApartment}
               />
             )}

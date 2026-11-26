@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { CHARACTERS, TEAM_SIZE } from '../game/characters.js'
 import styles from './CharacterSelectionScreen.module.css'
 
-export default function CharacterSelectionScreen({ onBack, onStart }) {
+export default function CharacterSelectionScreen({
+  onBack,
+  onStart,
+  onSelectionLimit,
+}) {
   const [selectedIds, setSelectedIds] = useState([])
   const titleRef = useRef(null)
   const teamIsFull = selectedIds.length === TEAM_SIZE
@@ -60,14 +64,19 @@ export default function CharacterSelectionScreen({ onBack, onStart }) {
           <ul className={styles.roster}>
             {CHARACTERS.map((character) => {
               const selected = selectedIds.includes(character.id)
+              const unavailable = teamIsFull && !selected
 
               return (
                 <li key={character.id}>
                   <CharacterCard
                     character={character}
                     selected={selected}
-                    disabled={teamIsFull && !selected}
-                    onToggle={() => toggleCharacter(character.id)}
+                    unavailable={unavailable}
+                    onToggle={
+                      unavailable
+                        ? onSelectionLimit
+                        : () => toggleCharacter(character.id)
+                    }
                   />
                 </li>
               )
@@ -90,13 +99,13 @@ export default function CharacterSelectionScreen({ onBack, onStart }) {
   )
 }
 
-function CharacterCard({ character, selected, disabled, onToggle }) {
+function CharacterCard({ character, selected, unavailable, onToggle }) {
   return (
     <button
       type="button"
       className={styles.card}
       aria-pressed={selected}
-      disabled={disabled}
+      aria-disabled={unavailable}
       onClick={onToggle}
     >
       <span className={styles.indicator} aria-hidden="true">

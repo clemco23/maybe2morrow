@@ -92,7 +92,7 @@
   color: var(--text);
 }
 
-button.card:not(:disabled):hover {
+.card[aria-disabled='false']:hover {
   border-color: #d8a966;
   background: radial-gradient(ellipse at 50% 55%, #82583a, #39291c 77%);
 }
@@ -103,7 +103,11 @@ button.card:not(:disabled):hover {
   box-shadow: inset 0 0 0 1px var(--accent);
 }
 
-.card:disabled .portrait {
+.card[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+.card[aria-disabled='true'] .portrait {
   filter: saturate(0.55);
 }
 
@@ -143,7 +147,7 @@ button.card:not(:disabled):hover {
   color: var(--ink);
 }
 
-.card:disabled .indicator {
+.card[aria-disabled='true'] .indicator {
   visibility: hidden;
 }
 

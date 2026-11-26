@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { createMenuAudio } from './createMenuAudio.js'
+import { createAudioMixer } from './createAudioMixer.js'
 
 const storageKey = 'maybe-tomorrow.audio.v1'
-const defaultSettings = { muted: false, musicVolume: 35, clickVolume: 65 }
+const defaultSettings = {
+  muted: false,
+  musicVolume: 35,
+  clickVolume: 65,
+  effectsVolume: 55,
+}
 
 function readVolume(value, defaultValue) {
   return Number.isInteger(value) && value >= 0 && value <= 100
@@ -18,13 +23,17 @@ function readSettings() {
       muted: saved?.muted === true,
       musicVolume: readVolume(saved?.musicVolume, defaultSettings.musicVolume),
       clickVolume: readVolume(saved?.clickVolume, defaultSettings.clickVolume),
+      effectsVolume: readVolume(
+        saved?.effectsVolume,
+        defaultSettings.effectsVolume,
+      ),
     }
   } catch {
     return defaultSettings
   }
 }
 
-export function useMenuAudio() {
+export function useGameAudio() {
   const [settings, setSettings] = useState(readSettings)
   const audioRef = useRef(null)
 
@@ -37,14 +46,15 @@ export function useMenuAudio() {
 
   function applySettings(next) {
     const soundEnabled =
-      !next.muted && (next.musicVolume > 0 || next.clickVolume > 0)
+      !next.muted &&
+      (next.musicVolume > 0 || next.clickVolume > 0 || next.effectsVolume > 0)
 
     if (
       !audioRef.current &&
       soundEnabled &&
       typeof window.AudioContext === 'function'
     ) {
-      audioRef.current = createMenuAudio()
+      audioRef.current = createAudioMixer()
     }
 
     audioRef.current?.applySettings(next)
@@ -62,18 +72,27 @@ export function useMenuAudio() {
     }
   }
 
-  function handleMenuClick(event) {
+  function handleClick(event) {
     if (!event.nativeEvent.isTrusted) return
 
     applySettings(settings)
 
     if (
       event.target instanceof Element &&
-      event.target.closest('button:enabled, input:enabled')
+      event.target.closest(
+        'button:enabled:not([aria-disabled="true"], [data-game-action]), input:enabled',
+      )
     ) {
-      audioRef.current?.playClick()
+      audioRef.current?.playMenuSound('click')
     }
   }
 
-  return { settings, updateSettings, handleMenuClick }
+  return {
+    settings,
+    updateSettings,
+    handleClick,
+    playMenuError: () => audioRef.current?.playMenuSound('wrong'),
+    playGameSounds: (sounds) => audioRef.current?.playGameSounds(sounds),
+    stopGameSounds: () => audioRef.current?.stopGameSounds(),
+  }
 }
